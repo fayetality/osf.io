@@ -16,7 +16,6 @@
     };
 
     Fangorn.config.osfstorage = {
-
         uploadMethod: 'PUT',
         uploadUrl: null,
         uploadAdd: function(file, item) {
@@ -35,7 +34,7 @@
             var parent = item.parent().data; // self.getByID(row.parentID);
             item.data.urls = {
                 'view': buildUrl(parent, file, 'web'),
-                'download': buildUrl(parent, file, 'web', '/download/'),
+                'download': buildUrl(parent, file, 'web', '?action=download'),
                 'delete': buildUrl(parent, file, 'api')
             };
             console.log("parent permissions", parent.permissions);
@@ -58,5 +57,4 @@
         }
 
     };
-
 }));

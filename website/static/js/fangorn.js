@@ -223,7 +223,7 @@
             window.event.cancelBubble = true;
         }        
         window.console.log('Download Event triggered', this, event, item, col);
-        if(!item.data.addon){
+        if(item.data.addon === 'osfstorage'){
             item.data.downloads++;    
         }
         window.location = item.data.urls.download;
@@ -308,13 +308,13 @@
 
         //Download button if this is an item
         if (item.kind === 'item') {
-            buttons.push({ 
+            buttons.push({
                 'name' : '',
                 'icon' : 'icon-download-alt',
                 'css' : 'btn btn-info btn-xs',
                 'onclick' : _downloadEvent
             },
-            { 
+            {
                 'name' : '',
                 'icon' : 'icon-remove',
                 'css' : 'm-l-lg text-danger fg-hover-hide',
@@ -359,7 +359,7 @@
             sortInclude : false,
             custom : _fangornActionColumn
         }); 
-        if(!item.data.addon){
+        if(item.data.addon === 'osfstorage'){
            default_columns.push({
                 data : 'downloads',
                 sortInclude : false,
@@ -517,7 +517,7 @@
         },
         // Create the Treebeard once all addons have been configured
         _initGrid: function() {
-            this.grid = Treebeard.run(this.options);
+            this.grid = Treebeard(this.options);
             return this.grid;
         }
 

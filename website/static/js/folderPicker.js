@@ -196,12 +196,12 @@
         self.options.initialFolderName = opts.initialFolderName;
 
         // Start up the grid
-        self.grid = Treebeard.run(self.options);
+        self.grid = Treebeard(self.options);
         // Set up listener for folder selection
 
         $(selector).on('change', 'input[name="' + self.selector + INPUT_NAME + '"]', function(evt) {
             var id = $(this).val();
-            var row = self.grid.find(id);
+            var row = self.grid.tbController.find(id);
 
             //// Store checked state of rows so that it doesn't uncheck when HGrid is redrawn
             self.options.onPickFolder.call(self, evt, row);

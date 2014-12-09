@@ -445,13 +445,14 @@
         if(!item.data.contributors){
             return '';
         }
-        var total = 0;
-        return item.data.contributors.map(function(person){
-            total = total + 1; 
-            if(total > 2) {
-                return m('span',' + ' + total-2);
+        return item.data.contributors.map(function(person, index, arr){
+            if (index > 2) {
+                return;
             }
-            return m('span',person.name);
+            if(index === 2) {
+                return m('span',' + ' + (arr.length-2));
+            }
+            return m('span',person.name + ', ');
         });
     }
 
@@ -721,9 +722,6 @@
         this.selected = item.id;
         $(ui.helper).css({ 'height' : '25px', 'width' : '400px', 'background' : 'white', 'padding' : '0px 10px', 'box-shadow' : '0 0 4px #ccc'});
         items = this.multiselected.length > 0 ? this.multiselected : [item]; 
-        // console.log("draglogic", event);
-
-        // dragLogic(event, items, ui);
     }
 
     function _poDrop (event, ui) {
@@ -735,8 +733,6 @@
     function _poOver (event, ui) {
         var items = this.multiselected.length === 0 ? [this.find(this.selected)] : this.multiselected, 
             folder = this.find($(event.target).attr('data-id'));
-            console.log("draglogic", event, ui);
-
             dragLogic.call(this, event, items, ui);
 
         //     acceptDrop = canAcceptDrop (items, folder); 
@@ -764,7 +760,6 @@
 
 
     function dragLogic(event, items, ui){
-        console.log("helper", ui.helper, "folder", event.target); 
         var canCopy = true;
         var canMove = true;
         var folder = this.find($(event.target).attr('data-id'));
@@ -963,7 +958,7 @@
 
     // OSF-specific Treebeard options common to all addons
         tbOptions = {
-                rowHeight : 35,         // user can override or get from .tb-row height
+                rowHeight : 30,         // user can override or get from .tb-row height
                 showTotal : 15,         // Actually this is calculated with div height, not needed. NEEDS CHECKING
                 paginate : false,       // Whether the applet starts with pagination or not.
                 paginateToggle : false, // Show the buttons that allow users to switch between scroll and paginate.
@@ -987,8 +982,8 @@
                     start : _poDragStart
                 },
                 dropEvents : {
-                    out  : function () { console.log(this, "Out");},
-                    over : function (event, ui) { console.log(this, event, ui, "Over");},
+                    out  : function () { },
+                    over : function (event, ui) { },
                     drop : _poDrop,
                     over : _poOver
                 },
@@ -1018,23 +1013,11 @@
                         item.load = false;
                     }
                 },
-                // onmouseoverrow : _poMouseOverRow,
                 onmultiselect : _poMultiselect,
-                dropzone : {                                           // All dropzone options.
-                    url: '/api/v1/project/',  // When users provide single URL for all uploads
-                    clickable : '#treeGrid',
-                    addRemoveLinks: false,
-                    previewTemplate: '<div></div>',
-                    parallelUploads: 1
-                    
-                },
                 resolveIcon : _poResolveIcon,
                 resolveToggle : _poResolveToggle,
                 resolveLazyloadUrl : _poResolveLazyLoad,
                 lazyLoadOnLoad : expandStateLoad,
-                // lazyLoadError : _fangornLazyLoadError,
-                // resolveUploadMethod :_fangornUploadMethod,
-
     };
 
 
@@ -1052,7 +1035,7 @@
         },
         // Create the Treebeard once all addons have been configured
         _initGrid: function() {
-            this.grid = Treebeard.run(this.options);
+            this.grid = Treebeard(this.options);
             return this.grid;
         }
 
