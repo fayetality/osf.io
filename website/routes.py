@@ -218,14 +218,7 @@ def make_url_map(app):
     ], prefix='/api/v1')
 
     process_rules(app, [
-        # API route for getting summary information for dashboard nodes.
         Rule('/dashboard/get_nodes/', 'get', website_views.get_dashboard_nodes, json_renderer),
-        # API route for getting serialized HGrid data, e.g. for the project
-        # organizer
-        # TODO: Perhaps this should be namespaced to so that the above route
-        # can use the /dashboard/ URL. e.g.
-        # /dashboard/<nid> -> Return info about dashboard nodes
-        # /dashboard/grid/<nid>/ -> Return hgrid-serialized data for dashboard nodes
         Rule(
             [
                 '/dashboard/<nid>',
@@ -1070,6 +1063,31 @@ def make_url_map(app):
 
         # Settings
 
+        Rule(
+            '/files/auth/',
+            'get',
+            addon_views.get_auth,
+            json_renderer,
+        ),
+
+        Rule(
+            [
+                '/project/<pid>/waterbutler/logs/',
+                '/project/<pid>/node/<nid>/waterbutler/logs/',
+            ],
+            'put',
+            addon_views.create_waterbutler_log,
+            json_renderer,
+        ),
+        Rule(
+            [
+                '/project/<pid>/waterbutler/files/',
+                '/project/<pid>/node/<nid>/waterbutler/files/',
+            ],
+            'get',
+            addon_views.get_waterbutler_render_url,
+            json_renderer,
+        ),
         Rule(
             '/settings/addons/',
             'post',

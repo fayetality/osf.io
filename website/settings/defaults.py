@@ -6,6 +6,8 @@ These settings can be overridden in local.py.
 
 import os
 import json
+import hashlib
+
 
 
 os_env = os.environ
@@ -213,3 +215,7 @@ GOOGLE_SITE_VERIFICATION = None
 
 # Pingdom
 PINGDOM_ID = None
+
+DEFAULT_HMAC_SECRET = 'changeme'
+DEFAULT_HMAC_ALGORITHM = hashlib.sha256
+WATERBUTLER_URL = 'http://localhost:7777/'

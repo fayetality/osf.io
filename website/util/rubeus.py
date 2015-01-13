@@ -19,7 +19,7 @@ from website.settings import (
 
 
 FOLDER = 'folder'
-FILE = 'item'
+FILE = 'file'
 KIND = 'kind'
 
 # TODO: Validate the JSON schema, esp. for addons
@@ -101,7 +101,7 @@ def build_addon_root(node_settings, name, permissions=None,
             'edit': node_settings.owner.can_edit(auth) and not node_settings.owner.is_registration
         }
     rv = {
-        'addon': node_settings.config.short_name,
+        'provider': node_settings.config.short_name,
         'addonFullname': node_settings.config.full_name,
         'name': name,
         'iconUrl': node_settings.config.icon_url,
@@ -434,16 +434,17 @@ class NodeFileCollector(object):
             else u'Private Component',
             'kind': FOLDER,
             'permissions': {
-                'edit': False,
+                'edit': self.can_edit,
                 'view': can_view,
             },
             'urls': {
-                'upload': os.path.join(node.api_url, 'osffiles') + '/',
+                'upload': None,
                 'fetch': None,
             },
             'children': children,
             'isPointer': not node.primary,
             'isSmartFolder': False,
+            'nodeID': node.resolve()._id,
         }
 
     def _collect_addons(self, node):
